@@ -1,13 +1,16 @@
 import { Formik, Field, ErrorMessage } from 'formik';
 import { nanoid } from 'nanoid';
 import { Form, SubmitButton } from './ContactForm.styled';
-import { object, string, number } from 'yup';
+import { object, string } from 'yup';
 import PropTypes from 'prop-types';
 import { Section } from 'components/Section/Section.styled';
 
 let ContactsSchema = object({
-  name: string().required(),
-  number: number().required().positive().integer(),
+  name: string()
+    .required()
+    .min(3, 'must be at least 3 characters long')
+    .max(20, 'must be less than 20 characters long'),
+  number: string().required().length(10, 'type 10 digits of phone number'),
 });
 
 export const ContactForm = ({ onSubmit }) => (
@@ -19,7 +22,7 @@ export const ContactForm = ({ onSubmit }) => (
         number: '',
       }}
       onSubmit={(values, actions) => {
-        onSubmit({ ...values, id: nanoid() });
+        onSubmit({ ...values });
         actions.resetForm();
       }}
       validationSchema={ContactsSchema}
@@ -39,7 +42,7 @@ export const ContactForm = ({ onSubmit }) => (
           type="tel"
           id={nanoid()}
           name="number"
-          placeholder="101"
+          placeholder="067-000-00-00"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         />
         <ErrorMessage name="number" component="span" />

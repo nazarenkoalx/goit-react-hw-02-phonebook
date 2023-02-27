@@ -3,6 +3,7 @@ import { ContactList } from './ContactList/ContactList';
 import { Component } from 'react';
 import { Filter } from './Filter/Filter';
 import { Container } from './Container/Container.styled';
+import { nanoid } from 'nanoid';
 
 const INITIAL_STATE = {
   contacts: [],
@@ -13,12 +14,18 @@ export class App extends Component {
   state = { ...INITIAL_STATE };
 
   addContact = newContact => {
-    if (this.state.contacts.find(contact => contact.name === newContact.name)) {
-      alert(`nope, ${newContact.name} is already added to contact list =(`);
+    if (
+      this.state.contacts.find(
+        contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+      )
+    ) {
+      return alert(
+        `nope, ${newContact.name} is already added to contact list =(`
+      );
     }
     this.setState(prevState => {
       return {
-        contacts: [...prevState.contacts, newContact],
+        contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
       };
     });
   };
@@ -51,10 +58,7 @@ export class App extends Component {
     return (
       <Container>
         <ContactForm onSubmit={this.addContact} />
-        <Filter
-          onChange={this.searchContact}
-          contacts={fileredContacts}
-        ></Filter>
+        <Filter onChange={this.searchContact} contacts={fileredContacts} />
         <ContactList contacts={fileredContacts} onDelete={this.deleteContact} />
       </Container>
     );

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 export const ContactList = ({ contacts, onDelete }) => {
   return (
     <Section>
-      <ul>
-        <p>Contact list</p>
-        {contacts[0] ? (
-          contacts.map(contact => {
+      <p>Contact list</p>
+      {contacts.length > 0 ? (
+        <ul>
+          {contacts.map(contact => {
             const { id, name, number } = contact;
             return (
               <li key={id}>
@@ -19,11 +19,11 @@ export const ContactList = ({ contacts, onDelete }) => {
                 </button>
               </li>
             );
-          })
-        ) : (
-          <p>Your contacts list is empty</p>
-        )}
-      </ul>
+          })}
+        </ul>
+      ) : (
+        <p>Your contacts list is empty</p>
+      )}
     </Section>
   );
 };
